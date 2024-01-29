@@ -1,16 +1,17 @@
-# surja_ecommerce
+# Minimalist Shopping App
 
-A new Flutter project.
+Welcome to the Minimalist Shopping App project! This app is designed to provide a simple and intuitive shopping experience for users. With its minimalist design and user-friendly interface, users can easily create shopping lists, add items, and manage their shopping needs efficiently.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Minimalist Design:** Enjoy a clutter-free shopping experience with a clean and minimalist design.
+- **Navigation Panel with Animations:** Navigate seamlessly through the app with a smooth and animated navigation panel.
+- **Scrolling View:** Easily scroll through your shopping lists and items with a smooth scrolling view.
+- **Cart Page and Home Page:** Access your shopping cart and home page to manage your shopping items conveniently.
+- **Add Items to Cart:** Quickly add items to your cart with just a few taps.
+- **Delete Items from Cart:** Remove unwanted items from your cart easily to manage your shopping list effectively.
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies Used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Dart:** The programming language used for app development.
+- **Flutter:** The UI toolkit used to build the cross-platform app for Android.
