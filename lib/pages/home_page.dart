@@ -67,7 +67,17 @@ class _HomePageState extends State<HomePage> {
         title: const Text('ShoppingRD'),
         centerTitle: false,
         actions: [
-          if (!auth.isLoggedIn)
+          if (auth.isLoggedIn)
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                auth.logout();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Sesión cerrada')),
+                );
+              },
+            )
+          else
             IconButton(
               icon: const Icon(Icons.login),
               onPressed: () => Navigator.of(context).push(

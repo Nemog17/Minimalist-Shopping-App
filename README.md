@@ -10,6 +10,7 @@ Welcome to the Minimalist Shopping App project! This app is designed to provide 
 - **Cart Page and Home Page:** Access your shopping cart and home page to manage your shopping items conveniently.
 - **Add Items to Cart:** Quickly add items to your cart with just a few taps.
 - **Delete Items from Cart:** Remove unwanted items from your cart easily to manage your shopping list effectively.
+- **User Login and Logout:** Authenticate users and allow them to securely log out when finished.
 
 ## Technologies Used
 
