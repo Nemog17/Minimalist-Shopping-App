@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_rd/models/cart.dart';
-import 'package:shopping_rd/pages/intro_page.dart';
+import 'package:go_router/go_router.dart';
+
+import 'models/cart.dart';
+import 'providers/auth_provider.dart';
+import 'pages/intro_page.dart';
+import 'pages/home_page.dart';
+import 'pages/login_page.dart';
+import 'pages/admin_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,12 +18,50 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create:(context) => Cart(),
-      builder: (context, child) =>  const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: IntroPage(),
-    )
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Cart()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: Consumer<AuthProvider>(
+        builder: (context, auth, _) {
+          final router = GoRouter(
+            initialLocation: '/login',
+            refreshListenable: auth,
+            routes: [
+              GoRoute(
+                path: '/login',
+                builder: (context, state) => const LoginPage(),
+              ),
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const IntroPage(),
+              ),
+              GoRoute(
+                path: '/home',
+                builder: (context, state) => const HomePage(),
+              ),
+              GoRoute(
+                path: '/admin',
+                builder: (context, state) => const AdminPage(),
+              ),
+            ],
+            redirect: (context, state) {
+              final loggedIn = auth.isLoggedIn;
+              final isAdmin = auth.isAdmin;
+              final loc = state.subloc;
+              if (!loggedIn && loc != '/login') return '/login';
+              if (loggedIn && loc == '/login') return '/home';
+              if (loc == '/admin' && !isAdmin) return '/home';
+              return null;
+            },
+          );
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: router,
+          );
+        },
+      ),
     );
   }
 }

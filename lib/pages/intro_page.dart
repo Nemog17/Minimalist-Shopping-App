@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'home_page.dart';
+import 'package:go_router/go_router.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -46,10 +46,9 @@ class IntroPage extends StatelessWidget {
           
               //shop now button
               GestureDetector(
-                onTap:() => Navigator.push(context, 
-                MaterialPageRoute(builder:(context) => HomePage(),
-                ),
-                ),
+                onTap: () {
+                  context.go('/home');
+                },
                 child: Container(
                   decoration: BoxDecoration(color: Colors.grey[900],
                   borderRadius: BorderRadius.circular(12)
