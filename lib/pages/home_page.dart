@@ -41,23 +41,20 @@ final List<Widget> _pages =[
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       bottomNavigationBar: MyBottomNavBar(
         onTabChange: (index) =>navigateBottomBar(index),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation:0,
-        leading: Builder(builder:(context) => IconButton(icon: const 
-        Icon(
-          Icons.menu, 
-        color: Colors.black,
+        title: const Text('Home'),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
         ),
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
-        ),
-      ),
       ),
       drawer: Drawer(
         backgroundColor: Colors.white70,
