@@ -15,7 +15,7 @@ class CartPage extends StatelessWidget {
         title: const Text('Mi Carrito'),
         leading: IconButton(
           icon: const Icon(Icons.home),
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.pop(),
         ),
       ),
       body: Consumer<Cart>(
