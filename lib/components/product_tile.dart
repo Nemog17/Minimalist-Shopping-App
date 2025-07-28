@@ -10,7 +10,7 @@ class ProductTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 12),
-      width: 140,
+      width: 120,
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -19,7 +19,7 @@ class ProductTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            height: 100,
+            height: 80,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: product.imagePath.startsWith('http')
@@ -41,7 +41,7 @@ class ProductTile extends StatelessWidget {
           const SizedBox(height: 8),
           ElevatedButton(
             onPressed: onTap,
-            style: ElevatedButton.styleFrom(minimumSize: const Size(120, 30)),
+            style: ElevatedButton.styleFrom(minimumSize: const Size(110, 30)),
             child: const Text('Agregar al carrito'),
           ),
           const SizedBox(height: 8),
