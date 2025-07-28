@@ -20,21 +20,27 @@ class WooCommerceService {
     final uri = Uri.parse(
       '$baseUrl/wp-json/wc/v3/products?consumer_key=$consumerKey&consumer_secret=$consumerSecret',
     );
-    final response = await http.get(uri);
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
-      return data
-          .map((item) => Product(
-                name: item['name'] ?? 'Unknown',
-                price: item['price'] ?? '0',
-                description: item['description'] ?? '',
-                imagePath: item['images'] != null && item['images'].isNotEmpty
-                    ? item['images'][0]['src']
-                    : '',
-              ))
-          .toList();
-    } else {
-      throw Exception('Failed to load WooCommerce products');
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data
+            .map((item) => Product(
+                  name: item['name'] ?? 'Unknown',
+                  price: item['price'] ?? '0',
+                  description: item['description'] ?? '',
+                  imagePath: item['images'] != null && item['images'].isNotEmpty
+                      ? item['images'][0]['src']
+                      : '',
+                ))
+            .toList();
+      } else {
+        // Unexpected status code - return an empty list
+        return [];
+      }
+    } catch (e) {
+      // Any network or decoding errors are ignored
+      return [];
     }
   }
 }

@@ -14,14 +14,27 @@ class Cart extends ChangeNotifier{
 
   //load products from APIs
   Future<void> loadProducts() async {
-    final fakeProducts = await FakeStoreApi.fetchProducts();
+    final List<Product> allProducts = [];
+
+    try {
+      allProducts.addAll(await FakeStoreApi.fetchProducts());
+    } catch (_) {
+      // Ignore network errors from the fake store API
+    }
+
     final wooService = WooCommerceService(
       baseUrl: 'https://example.com',
       consumerKey: 'ck_your_key',
       consumerSecret: 'cs_your_secret',
     );
-    final wooProducts = await wooService.fetchProducts();
-    productShop = [...fakeProducts, ...wooProducts];
+
+    try {
+      allProducts.addAll(await wooService.fetchProducts());
+    } catch (_) {
+      // Errors are already handled inside [fetchProducts]
+    }
+
+    productShop = allProducts;
     notifyListeners();
   }
 
