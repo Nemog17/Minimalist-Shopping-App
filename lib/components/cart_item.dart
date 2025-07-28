@@ -1,39 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shopping_rd/models/cart.dart';
 
 import '../models/product.dart';
+import '../models/cart.dart';
 
-class CartItem extends StatefulWidget {
-  Product product;
-  CartItem({super.key, required this.product});
+class CartItem extends StatelessWidget {
+  final Product product;
+  final bool isSavedItem;
+  const CartItem({super.key, required this.product, this.isSavedItem = false});
 
-  @override
-  State<CartItem> createState() => _CartItemState();
-}
+  void _remove(BuildContext context) {
+    if (isSavedItem) {
+      Provider.of<Cart>(context, listen: false).removeItemFromSaved(product);
+    } else {
+      Provider.of<Cart>(context, listen: false).removeItemFromCart(product);
+    }
+  }
 
-class _CartItemState extends State<CartItem> {
-
-  //remove item from cart
-void removeItemFromCart(){
-  Provider.of<Cart>(context, listen:false).removeItemFromCart(widget.product);
-}
+  void _toggleSave(BuildContext context) {
+    if (isSavedItem) {
+      Provider.of<Cart>(context, listen: false).moveToCart(product);
+    } else {
+      Provider.of<Cart>(context, listen: false).saveItemForLater(product);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:BoxDecoration(color: Colors.grey[100],
-      borderRadius: BorderRadius.circular(8),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
       ),
-      margin: const EdgeInsets.only(bottom:10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
-        leading: widget.product.imagePath.startsWith('http')
-            ? Image.network(widget.product.imagePath)
-            : Image.asset(widget.product.imagePath),
-        title: Text(widget.product.name),
-        subtitle: Text(widget.product.price),
-        trailing: IconButton(icon:Icon(Icons.delete), 
-        onPressed: removeItemFromCart,
+        leading: product.imagePath.startsWith('http')
+            ? Image.network(product.imagePath)
+            : Image.asset(product.imagePath),
+        title: Text(product.name),
+        subtitle: Text(product.price),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(isSavedItem ? Icons.shopping_cart : Icons.bookmark),
+              onPressed: () => _toggleSave(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () => _remove(context),
+            ),
+          ],
         ),
       ),
     );
