@@ -12,6 +12,9 @@ class Cart extends ChangeNotifier{
 
   List<Product> userCart=[];
 
+  // list of items saved for later
+  List<Product> savedForLater = [];
+
   //load products from APIs
   Future<void> loadProducts() async {
     final List<Product> allProducts = [];
@@ -51,9 +54,28 @@ class Cart extends ChangeNotifier{
     return userCart;
   }
 
+  // get saved for later list
+  List<Product> getSavedForLater() {
+    return savedForLater;
+  }
+
   //add items to cart
   void addItemToCart(Product product)
   {
+    userCart.add(product);
+    notifyListeners();
+  }
+
+  // save item for later
+  void saveItemForLater(Product product) {
+    userCart.remove(product);
+    savedForLater.add(product);
+    notifyListeners();
+  }
+
+  // move saved item back to cart
+  void moveToCart(Product product) {
+    savedForLater.remove(product);
     userCart.add(product);
     notifyListeners();
   }
@@ -62,6 +84,12 @@ class Cart extends ChangeNotifier{
 void removeItemFromCart(Product product)
 {
   userCart.remove(product);
+  notifyListeners();
+}
+
+// remove item from saved list
+void removeItemFromSaved(Product product) {
+  savedForLater.remove(product);
   notifyListeners();
 }
 }
