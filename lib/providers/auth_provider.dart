@@ -14,6 +14,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isAdmin => _currentUser?.isAdmin ?? false;
 
   bool login(String email, String password) {
+    if (isLoggedIn) return false;
     try {
       final user = _users.firstWhere(
         (u) => u.email == email && u.password == password,

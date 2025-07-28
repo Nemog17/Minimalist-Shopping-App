@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/cart.dart';
 import '../models/product.dart';
 import 'login_page.dart';
+import '../providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
@@ -59,18 +60,20 @@ class _HomePageState extends State<HomePage> {
       return matchesSearch && matchesCategory;
     }).toList();
     final cartCount = cart.getUserCart().length;
+    final auth = context.watch<AuthProvider>();
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('ShoppingRD'),
         centerTitle: false,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.login),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const LoginPage()),
+          if (!auth.isLoggedIn)
+            IconButton(
+              icon: const Icon(Icons.login),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const LoginPage()),
+              ),
             ),
-          ),
           Stack(
             children: [
               IconButton(
