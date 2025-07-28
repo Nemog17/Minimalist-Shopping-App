@@ -80,6 +80,12 @@ class Cart extends ChangeNotifier{
     notifyListeners();
   }
 
+  // remove all items from cart
+  void clearCart() {
+    userCart.clear();
+    notifyListeners();
+  }
+
   //remove items from cart
 void removeItemFromCart(Product product)
 {

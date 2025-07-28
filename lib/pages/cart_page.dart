@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../components/cart_item.dart';
 import '../models/cart.dart';
+import '../services/payment_service.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -51,6 +52,31 @@ class CartPage extends StatelessWidget {
                       .toList(),
                 ],
               ],
+            ),
+          );
+        },
+      ),
+      bottomNavigationBar: Consumer<Cart>(
+        builder: (context, cart, child) {
+          final items = cart.getUserCart();
+          if (items.isEmpty) return const SizedBox.shrink();
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                final success = await PaymentService.processPayment(items);
+                if (success) {
+                  cart.clearCart();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Pago completado')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Error al procesar pago')),
+                  );
+                }
+              },
+              child: const Text('Pagar'),
             ),
           );
         },
