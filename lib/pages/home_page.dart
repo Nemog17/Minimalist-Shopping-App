@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/cart.dart';
 import '../models/product.dart';
-import 'cart_page.dart';
 import 'login_page.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,9 +38,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _openCart() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const CartPage()),
-    );
+    context.push('/cart');
   }
 
   @override

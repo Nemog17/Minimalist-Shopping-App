@@ -8,6 +8,7 @@ import 'pages/intro_page.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
 import 'pages/admin_page.dart';
+import 'pages/cart_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,6 +41,10 @@ class MyApp extends StatelessWidget {
               GoRoute(
                 path: '/home',
                 builder: (context, state) => const HomePage(),
+              ),
+              GoRoute(
+                path: '/cart',
+                builder: (context, state) => const CartPage(),
               ),
               GoRoute(
                 path: '/admin',
