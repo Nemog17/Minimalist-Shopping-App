@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_rd/components/bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
-
-import '../providers/auth_provider.dart';
+import '../models/cart.dart';
+import '../models/product.dart';
 import 'cart_page.dart';
-import 'shop_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,120 +12,123 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _loading = true;
 
-//this selected index is to control the bottom nav bar
-int _selectedIndex=0;
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<Cart>(context, listen: false).loadProducts().then((_) {
+      setState(() {
+        _loading = false;
+      });
+    });
+  }
 
-//this method will update our selected index
-//when the user taps on the bottom bar
-void navigateBottomBar(int index)
-{
-  setState((){
-    _selectedIndex =index;
+  void _addToCart(Product product) {
+    Provider.of<Cart>(context, listen: false).addItemToCart(product);
+  }
 
-  });
-}
+  void _openCart() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const CartPage()),
+    );
+  }
 
-//pages to display
-final List<Widget> _pages =[
-
-  //shop page
-  const ShopPage(),
-
-  //cart page
-  const CartPage(),
-];
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<Cart>();
+    final products = cart.getProductList();
+    final cartCount = cart.getUserCart().length;
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: MyBottomNavBar(
-        onTabChange: (index) =>navigateBottomBar(index),
-      ),
       appBar: AppBar(
-        title: const Text('Home'),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
+        title: const Text('Shop'),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: _openCart,
+              ),
+              if (cartCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                    child: Text(
+                      '$cartCount',
+                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
           ),
-        ),
+        ],
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white70,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              
-              children:[
-            DrawerHeader(child: Image.asset('lib/images/nike.png', color: Colors.white,fit: BoxFit.contain,
-             ),
-             ),
-             
-                Padding(
-               padding: const EdgeInsets.symmetric(horizontal:25.0),
-               
-             ),
-
-             Padding(
-               padding: const EdgeInsets.only(left: 25.0),
-               child: ListTile(
-                 leading: const Icon(Icons.home),
-                 title: const Text('Home'),
-                 onTap: () {
-                   Navigator.pop(context);
-                   context.go('/home');
-                 },
-               ),
-             ),
-             Padding(
-               padding: const EdgeInsets.only(left: 25.0),
-               child: ListTile(
-                 leading: const Icon(Icons.info),
-                 title: const Text('About'),
-               ),
-             ),
-             if (Provider.of<AuthProvider>(context).isAdmin)
-               Padding(
-                 padding: const EdgeInsets.only(left: 25.0),
-                 child: ListTile(
-                   leading: const Icon(Icons.admin_panel_settings),
-                   title: const Text('Admin Panel'),
-                   onTap: () {
-                     Navigator.pop(context);
-                     context.go('/admin');
-                   },
-                 ),
-               ),
-              ],
-
-             ),
-             
-             
-             
-
-//logout
-             Padding(
-               padding: const EdgeInsets.only(left: 25.0, bottom:25),
-               child: ListTile(
-                 leading: const Icon(Icons.logout),
-                 title: const Text('Logout'),
-                 onTap: () {
-                   Provider.of<AuthProvider>(context, listen: false).logout();
-                   Navigator.pop(context);
-                   context.go('/login');
-                 },
-               ),
-             ),
-
-          ],
-        )
-      ),
-      body:_pages[_selectedIndex],
-
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : GridView.builder(
+              padding: const EdgeInsets.all(12),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: 1,
+              ),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return GestureDetector(
+                  onTap: () => _addToCart(product),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(12),
+                              topRight: Radius.circular(12),
+                            ),
+                            child: product.imagePath.startsWith('http')
+                                ? Image.network(product.imagePath, fit: BoxFit.cover)
+                                : Image.asset(product.imagePath, fit: BoxFit.cover),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            product.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                          child: Text(
+                            'Rs. ${product.price}',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
+
