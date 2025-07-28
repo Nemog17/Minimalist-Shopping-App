@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_rd/components/bottom_nav_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
+import '../providers/auth_provider.dart';
 import 'cart_page.dart';
 import 'shop_page.dart';
 
@@ -75,16 +78,34 @@ final List<Widget> _pages =[
 
              Padding(
                padding: const EdgeInsets.only(left: 25.0),
-               child: ListTile(leading: Icon(Icons.home),
-               title: Text('Home'),
+               child: ListTile(
+                 leading: const Icon(Icons.home),
+                 title: const Text('Home'),
+                 onTap: () {
+                   Navigator.pop(context);
+                   context.go('/home');
+                 },
                ),
              ),
-Padding(
+             Padding(
                padding: const EdgeInsets.only(left: 25.0),
-               child: ListTile(leading: Icon(Icons.info),
-               title: Text('About'),
+               child: ListTile(
+                 leading: const Icon(Icons.info),
+                 title: const Text('About'),
                ),
              ),
+             if (Provider.of<AuthProvider>(context).isAdmin)
+               Padding(
+                 padding: const EdgeInsets.only(left: 25.0),
+                 child: ListTile(
+                   leading: const Icon(Icons.admin_panel_settings),
+                   title: const Text('Admin Panel'),
+                   onTap: () {
+                     Navigator.pop(context);
+                     context.go('/admin');
+                   },
+                 ),
+               ),
               ],
 
              ),
@@ -95,8 +116,14 @@ Padding(
 //logout
              Padding(
                padding: const EdgeInsets.only(left: 25.0, bottom:25),
-               child: ListTile(leading: Icon(Icons.logout),
-               title: Text('Logout'),
+               child: ListTile(
+                 leading: const Icon(Icons.logout),
+                 title: const Text('Logout'),
+                 onTap: () {
+                   Provider.of<AuthProvider>(context, listen: false).logout();
+                   Navigator.pop(context);
+                   context.go('/login');
+                 },
                ),
              ),
 
