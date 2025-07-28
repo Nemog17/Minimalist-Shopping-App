@@ -19,6 +19,7 @@ class FakeStoreApi {
                 description: item['description'] ?? '',
                 imagePath: item['image'] ?? '',
                 category: item['category'] ?? 'General',
+                isDraft: false,
               ))
           .toList();
     } else {
