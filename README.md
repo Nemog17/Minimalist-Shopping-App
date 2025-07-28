@@ -15,3 +15,13 @@ Welcome to the Minimalist Shopping App project! This app is designed to provide 
 
 - **Dart:** The programming language used for app development.
 - **Flutter:** The UI toolkit used to build the cross-platform app for Android.
+
+## API Integration
+
+The project includes simple service classes for fetching products from two
+different APIs:
+
+- **Fake Store API:** Provides demo products used for quick testing. See
+  `lib/services/fake_store_api.dart` for the implementation.
+- **WooCommerce REST API:** Allows connecting the app to a WooCommerce store.
+  Configuration details can be found in `lib/services/woocommerce_service.dart`.
