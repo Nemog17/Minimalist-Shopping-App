@@ -18,6 +18,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit() {
     final auth = Provider.of<AuthProvider>(context, listen: false);
+    if (auth.isLoggedIn) {
+      setState(() => _error = 'Ya has iniciado sesión');
+      return;
+    }
     final success = auth.login(_emailController.text, _passwordController.text);
     if (success) {
       context.go('/home');
