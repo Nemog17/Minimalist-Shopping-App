@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<AuthProvider>(
         builder: (context, auth, _) {
           final router = GoRouter(
-            initialLocation: '/login',
+            initialLocation: '/',
             refreshListenable: auth,
             routes: [
               GoRoute(
@@ -47,11 +47,8 @@ class MyApp extends StatelessWidget {
               ),
             ],
             redirect: (context, state) {
-              final loggedIn = auth.isLoggedIn;
               final isAdmin = auth.isAdmin;
               final loc = state.matchedLocation;
-              if (!loggedIn && loc != '/login') return '/login';
-              if (loggedIn && loc == '/login') return '/home';
               if (loc == '/admin' && !isAdmin) return '/home';
               return null;
             },
