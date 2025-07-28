@@ -1,44 +1,54 @@
 import 'package:flutter/material.dart';
 
-import 'shoe.dart';
+import 'product.dart';
+import '../services/fake_store_api.dart';
+import '../services/woocommerce_service.dart';
 
 class Cart extends ChangeNotifier{
-  //list of shoes for sale
-  List<Shoe> shoeShop =[
-    Shoe(name: 'Max HM02', price: ' 4000', description: 'Shoe in Blue', imagePath: 'lib/images/blue.jpg'),
-    Shoe(name: 'Air Jordan ', price: ' 1200', description: 'Shoe in Red', imagePath: 'lib/images/red.jpg'),
-    Shoe(name: 'CP Runner', price: ' 2400', description: 'Shoe in Neon', imagePath: 'lib/images/green.jpg'),
-    Shoe(name: 'Rockstar 92', price: ' 4600', description: 'Shoe in Gold', imagePath: 'lib/images/yellow.jpg'),
-  ];
+  //list of products for sale
+  List<Product> productShop = [];
 
   //list of items in user cart
 
-  List<Shoe> userCart=[];
+  List<Product> userCart=[];
 
-  //getting list of shoes for sale
-  List<Shoe> getShoeList()
+  //load products from APIs
+  Future<void> loadProducts() async {
+    final fakeProducts = await FakeStoreApi.fetchProducts();
+    final wooService = WooCommerceService(
+      baseUrl: 'https://example.com',
+      consumerKey: 'ck_your_key',
+      consumerSecret: 'cs_your_secret',
+    );
+    final wooProducts = await wooService.fetchProducts();
+    productShop = [...fakeProducts, ...wooProducts];
+    notifyListeners();
+  }
+
+  //getting list of products for sale
+  List<Product> getProductList()
   {
-    return shoeShop;
+    return productShop;
 
   }
 
   //get cart
-  List<Shoe> getUserCart()
+  List<Product> getUserCart()
   {
     return userCart;
   }
 
   //add items to cart
-  void addItemToCart(Shoe shoe)
+  void addItemToCart(Product product)
   {
-    userCart.add(shoe);
+    userCart.add(product);
     notifyListeners();
   }
 
   //remove items from cart
-void removeItemFromCart(Shoe shoe)
+void removeItemFromCart(Product product)
 {
-  userCart.remove(shoe);
+  userCart.remove(product);
   notifyListeners();
 }
 }

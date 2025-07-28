@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:surja_ecommerce/models/cart.dart';
-import 'package:surja_ecommerce/pages/intro_page.dart';
+import 'package:shopping_rd/models/cart.dart';
+import 'package:shopping_rd/pages/intro_page.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:surja_ecommerce/models/shoe.dart';
+import 'package:shopping_rd/models/product.dart';
 
-class ShoeTile extends StatelessWidget {
-  Shoe shoe;
+class ProductTile extends StatelessWidget {
+  Product product;
   void Function()? onTap;
-   ShoeTile({super.key, required this.shoe, required this.onTap});
+  ProductTile({super.key, required this.product, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +17,19 @@ class ShoeTile extends StatelessWidget {
       Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-        //shoe
+        //product image
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: shoe.imagePath.startsWith('http')
-              ? Image.network(shoe.imagePath)
-              : Image.asset(shoe.imagePath),
+          child: product.imagePath.startsWith('http')
+              ? Image.network(product.imagePath)
+              : Image.asset(product.imagePath),
         ),
           
 
         //description
         Padding(
           padding: const EdgeInsets.symmetric(horizontal:20.0),
-          child: Text(shoe.description, style:TextStyle(color: Colors.grey[600])),
+          child: Text(product.description, style:TextStyle(color: Colors.grey[600])),
         ),
 
         //price details
@@ -43,10 +43,10 @@ class ShoeTile extends StatelessWidget {
                 children: 
               
               [
-                Text(shoe.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),
+                Text(product.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),
                 ),
                 const SizedBox(height: 3),
-                Text('Rs.'+shoe.price, style: TextStyle(color:Colors.grey,),),
+                Text('Rs.'+product.price, style: TextStyle(color:Colors.grey,),),
                 
           
           
