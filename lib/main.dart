@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             redirect: (context, state) {
               final loggedIn = auth.isLoggedIn;
               final isAdmin = auth.isAdmin;
-              final loc = state.subloc;
+              final loc = state.matchedLocation;
               if (!loggedIn && loc != '/login') return '/login';
               if (loggedIn && loc == '/login') return '/home';
               if (loc == '/admin' && !isAdmin) return '/home';
