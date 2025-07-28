@@ -16,14 +16,18 @@ class _HomePageState extends State<HomePage> {
   bool _loading = true;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  final List<String> _categories = ['Todos', 'Ofertas', 'Electrónica', 'Ropa'];
+  final List<String> _categories = ['Todos'];
   String _selectedCategory = 'Todos';
 
   @override
   void initState() {
     super.initState();
     Provider.of<Cart>(context, listen: false).loadProducts().then((_) {
+      final products =
+          Provider.of<Cart>(context, listen: false).getProductList();
+      final uniqueCats = products.map((p) => p.category).toSet();
       setState(() {
+        _categories.addAll(uniqueCats);
         _loading = false;
       });
     });
@@ -49,9 +53,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final cart = context.watch<Cart>();
     final allProducts = cart.getProductList();
-    final products = allProducts
-        .where((p) => p.name.toLowerCase().contains(_searchQuery.toLowerCase()))
-        .toList();
+    final products = allProducts.where((p) {
+      final matchesSearch =
+          p.name.toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesCategory =
+          _selectedCategory == 'Todos' || p.category == _selectedCategory;
+      return matchesSearch && matchesCategory;
+    }).toList();
     final cartCount = cart.getUserCart().length;
 
     return Scaffold(
@@ -175,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                'Rs. ${product.price}',
+                                'RD\$ ${product.price}',
                                 style: TextStyle(color: Colors.grey[600]),
                               ),
                             ),
