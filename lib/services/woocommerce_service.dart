@@ -32,6 +32,9 @@ class WooCommerceService {
                   imagePath: item['images'] != null && item['images'].isNotEmpty
                       ? item['images'][0]['src']
                       : '',
+                  category: item['categories'] != null && item['categories'].isNotEmpty
+                      ? item['categories'][0]['name']
+                      : 'General',
                 ))
             .toList();
       } else {

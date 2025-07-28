@@ -37,7 +37,8 @@ class ProductTile extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          Text('Rs. ${product.price}', style: TextStyle(color: Colors.grey[600])),
+          Text('RD\$ ${product.price}',
+              style: TextStyle(color: Colors.grey[600])),
           const SizedBox(height: 8),
           ElevatedButton(
             onPressed: onTap,
