@@ -16,6 +16,7 @@ class _AdminPageState extends State<AdminPage> {
   final TextEditingController _price = TextEditingController();
   final TextEditingController _description = TextEditingController();
   final TextEditingController _image = TextEditingController();
+  bool _draft = false;
 
   void _addProduct() {
     final cart = Provider.of<Cart>(context, listen: false);
@@ -24,6 +25,7 @@ class _AdminPageState extends State<AdminPage> {
       price: _price.text,
       description: _description.text,
       imagePath: _image.text,
+      isDraft: _draft,
     );
     cart.productShop.add(product);
     cart.notifyListeners();
@@ -31,6 +33,7 @@ class _AdminPageState extends State<AdminPage> {
     _price.clear();
     _description.clear();
     _image.clear();
+    _draft = false;
   }
 
   @override
@@ -59,6 +62,11 @@ class _AdminPageState extends State<AdminPage> {
                 controller: _image,
                 decoration: const InputDecoration(labelText: 'Image URL'),
               ),
+              SwitchListTile(
+                title: const Text('Draft'),
+                value: _draft,
+                onChanged: (value) => setState(() => _draft = value),
+              ),
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _addProduct,
@@ -74,12 +82,26 @@ class _AdminPageState extends State<AdminPage> {
                   return ListTile(
                     title: Text(product.name),
                     subtitle: Text(product.price),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        cart.productShop.removeAt(index);
-                        cart.notifyListeners();
-                      },
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Switch(
+                          value: product.isDraft,
+                          onChanged: (val) {
+                            setState(() {
+                              product.isDraft = val;
+                            });
+                            cart.notifyListeners();
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            cart.productShop.removeAt(index);
+                            cart.notifyListeners();
+                          },
+                        ),
+                      ],
                     ),
                   );
                 },

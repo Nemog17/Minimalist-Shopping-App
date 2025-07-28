@@ -57,7 +57,8 @@ class _HomePageState extends State<HomePage> {
           p.name.toLowerCase().contains(_searchQuery.toLowerCase());
       final matchesCategory =
           _selectedCategory == 'Todos' || p.category == _selectedCategory;
-      return matchesSearch && matchesCategory;
+      final isPublished = !p.isDraft;
+      return matchesSearch && matchesCategory && isPublished;
     }).toList();
     final cartCount = cart.getUserCart().length;
     final auth = context.watch<AuthProvider>();
@@ -83,6 +84,11 @@ class _HomePageState extends State<HomePage> {
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const LoginPage()),
               ),
+            ),
+          if (auth.isAdmin)
+            IconButton(
+              icon: const Icon(Icons.admin_panel_settings),
+              onPressed: () => context.push('/admin'),
             ),
           Stack(
             children: [

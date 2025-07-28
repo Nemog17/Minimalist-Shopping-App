@@ -35,6 +35,7 @@ class WooCommerceService {
                   category: item['categories'] != null && item['categories'].isNotEmpty
                       ? item['categories'][0]['name']
                       : 'General',
+                  isDraft: false,
                 ))
             .toList();
       } else {
