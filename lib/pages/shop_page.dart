@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../components/shoe_tile.dart';
+import '../components/product_tile.dart';
 import '../models/cart.dart';
-import '../models/shoe.dart';
+import '../models/product.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -13,10 +13,12 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  //adding shoe to cart method
-  void addShoeToCart(Shoe shoe)
+  bool _isLoading = true;
+
+  //adding product to cart method
+  void addProductToCart(Product product)
   {
-Provider.of<Cart>(context, listen:false).addItemToCart(shoe);
+Provider.of<Cart>(context, listen:false).addItemToCart(product);
 
 //alert added successfully
 showDialog(context: context, builder:(context) => AlertDialog(
@@ -25,9 +27,21 @@ showDialog(context: context, builder:(context) => AlertDialog(
 ),
 );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<Cart>(context, listen: false).loadProducts().then((_) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    return Consumer<Cart>(builder: (context, value, child)=>Column(
+    return Consumer<Cart>(builder: (context, value, child) => _isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Column(
       children: [
         //search bar
         Container( 
@@ -63,15 +77,15 @@ showDialog(context: context, builder:(context) => AlertDialog(
         const SizedBox(height:10),
 
         Expanded(child: ListView.builder(
-          itemCount: 4,
+          itemCount: value.getProductList().length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-          //create a shoe
-          Shoe shoe= value.getShoeList()[index];
+          //create a product
+          Product product = value.getProductList()[index];
 
-          //return shoe
-          return ShoeTile(shoe: shoe,
-          onTap: () => addShoeToCart(shoe),
+          //return product
+          return ProductTile(product: product,
+          onTap: () => addProductToCart(product),
           );
 
         },

@@ -26,7 +26,7 @@ class IntroPage extends StatelessWidget {
           
           
               //title
-              const Text('eShop-Dex', style: TextStyle(
+              const Text('ShoppingRD', style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize:20,
               ),
@@ -34,7 +34,7 @@ class IntroPage extends StatelessWidget {
               const  SizedBox(height:18),
           
               //sub title
-              const Text('Brand new sneakers and custom running shoes made with premium quality', style: TextStyle(
+              const Text('Encuentra todo lo que necesitas en un solo lugar', style: TextStyle(
               
               fontSize:15,
               color:Colors.grey,

@@ -1,6 +1,6 @@
 {
-    "name": "surja_ecommerce",
-    "short_name": "surja_ecommerce",
+    "name": "ShoppingRD",
+    "short_name": "ShoppingRD",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

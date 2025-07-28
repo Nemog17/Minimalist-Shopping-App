@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:surja_ecommerce/models/cart.dart';
+import 'package:shopping_rd/models/cart.dart';
 
-import '../models/shoe.dart';
+import '../models/product.dart';
 
 class CartItem extends StatefulWidget {
-  Shoe shoe;
-   CartItem({super.key, required this.shoe});
+  Product product;
+  CartItem({super.key, required this.product});
 
   @override
   State<CartItem> createState() => _CartItemState();
@@ -16,7 +16,7 @@ class _CartItemState extends State<CartItem> {
 
   //remove item from cart
 void removeItemFromCart(){
-  Provider.of<Cart>(context, listen:false).removeItemFromCart(widget.shoe);
+  Provider.of<Cart>(context, listen:false).removeItemFromCart(widget.product);
 }
 
   @override
@@ -27,11 +27,11 @@ void removeItemFromCart(){
       ),
       margin: const EdgeInsets.only(bottom:10),
       child: ListTile(
-        leading: widget.shoe.imagePath.startsWith('http')
-            ? Image.network(widget.shoe.imagePath)
-            : Image.asset(widget.shoe.imagePath),
-        title: Text(widget.shoe.name),
-        subtitle: Text(widget.shoe.price),
+        leading: widget.product.imagePath.startsWith('http')
+            ? Image.network(widget.product.imagePath)
+            : Image.asset(widget.product.imagePath),
+        title: Text(widget.product.name),
+        subtitle: Text(widget.product.price),
         trailing: IconButton(icon:Icon(Icons.delete), 
         onPressed: removeItemFromCart,
         ),

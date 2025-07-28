@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:surja_ecommerce/components/bottom_nav_bar.dart';
+import 'package:shopping_rd/components/bottom_nav_bar.dart';
 
 import 'cart_page.dart';
 import 'shop_page.dart';

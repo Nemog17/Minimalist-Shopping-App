@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/shoe.dart';
+import '../models/product.dart';
 
 /// A minimal WooCommerce REST API client for fetching products.
 class WooCommerceService {
@@ -14,9 +14,9 @@ class WooCommerceService {
     required this.consumerSecret,
   });
 
-  /// Fetches products from the WooCommerce store and converts them to [Shoe]
+  /// Fetches products from the WooCommerce store and converts them to [Product]
   /// objects used by the app.
-  Future<List<Shoe>> fetchProducts() async {
+  Future<List<Product>> fetchProducts() async {
     final uri = Uri.parse(
       '$baseUrl/wp-json/wc/v3/products?consumer_key=$consumerKey&consumer_secret=$consumerSecret',
     );
@@ -24,7 +24,7 @@ class WooCommerceService {
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data
-          .map((item) => Shoe(
+          .map((item) => Product(
                 name: item['name'] ?? 'Unknown',
                 price: item['price'] ?? '0',
                 description: item['description'] ?? '',
