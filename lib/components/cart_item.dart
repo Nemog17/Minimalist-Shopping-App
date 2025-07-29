@@ -7,7 +7,13 @@ import '../cubits/cart_cubit.dart';
 class CartItem extends StatelessWidget {
   final Product product;
   final bool isSavedItem;
-  const CartItem({super.key, required this.product, this.isSavedItem = false});
+  final int quantity;
+  const CartItem({
+    super.key,
+    required this.product,
+    this.isSavedItem = false,
+    this.quantity = 1,
+  });
 
   void _remove(BuildContext context) {
     if (isSavedItem) {
@@ -34,11 +40,21 @@ class CartItem extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(bottom: 10),
       child: ListTile(
-        leading: product.imagePath.startsWith('http')
-            ? Image.network(product.imagePath)
-            : Image.asset(product.imagePath),
+          leading: product.imagePath.startsWith('http')
+              ? Image.network(
+                  product.imagePath,
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                )
+              : Image.asset(
+                  product.imagePath,
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                ),
         title: Text(product.name),
-        subtitle: Text(product.price),
+        subtitle: Text('${product.price} - Cantidad: $quantity'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
