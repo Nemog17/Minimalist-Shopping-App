@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 
+import '../components/app_header.dart';
+
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const AppHeader(title: 'Bienvenido'),
       backgroundColor: Colors.grey[300],
       body: Center(
         child: Padding(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../components/app_header.dart';
+
 import '../components/cart_item.dart';
 import '../cubits/cart_cubit.dart';
 import '../services/payment_service.dart';
@@ -15,13 +17,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mi Carrito'),
-        leading: IconButton(
-          icon: const Icon(Icons.home),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      appBar: const AppHeader(title: 'Mi Carrito', showBack: true),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
           final items = state.userCart;
@@ -63,24 +59,22 @@ class CartPage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BlocBuilder<CartCubit, CartState>(
+      floatingActionButton: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
           final items = state.userCart;
           if (items.isEmpty) return const SizedBox.shrink();
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () async {
-                final auth = context.read<AuthCubit>();
-                if (!auth.state.isLoggedIn) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Inicia sesión para comprar')),
-                  );
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const LoginPage()),
-                  );
-                  return;
-                }
+          return FloatingActionButton.extended(
+            onPressed: () async {
+              final auth = context.read<AuthCubit>();
+              if (!auth.state.isLoggedIn) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Inicia sesión para comprar')),
+                );
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                );
+                return;
+              }
 
                 final address = await showDialog<String>(
                   context: context,
@@ -123,9 +117,8 @@ class CartPage extends StatelessWidget {
                   );
                 }
               },
-              child: const Text('Pagar'),
-            ),
-          );
+              label: const Text('Pagar'),
+            );
         },
       ),
     );

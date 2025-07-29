@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../components/app_header.dart';
+
 import '../cubits/auth_cubit.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar Sesión')),
+      appBar: const AppHeader(title: 'Iniciar Sesión', showBack: true),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
