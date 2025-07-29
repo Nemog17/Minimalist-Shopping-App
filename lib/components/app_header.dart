@@ -27,7 +27,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           if (showBack) {
             context.pop();
           } else {
-            context.go('/home');
+            context.push('/home');
           }
         },
       ),

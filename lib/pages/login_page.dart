@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     final success = auth.login(_emailController.text, _passwordController.text);
     if (success) {
-      context.go('/home');
+      context.push('/home');
     } else {
       setState(() => _error = 'Credenciales inválidas');
     }
