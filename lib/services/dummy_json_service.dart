@@ -8,8 +8,13 @@ class DummyJsonService {
 
   /// Fetches a list of products from the DummyJSON API and converts them to
   /// [Product] objects used by the app.
-  static Future<List<Product>> fetchProducts() async {
-    final response = await http.get(Uri.parse('$_baseUrl/products'));
+  ///
+  /// The [limit] parameter can be used to request a specific number of
+  /// products in a single call. By default it fetches all 194 available
+  /// demo products.
+  static Future<List<Product>> fetchProducts({int limit = 194}) async {
+    final response =
+        await http.get(Uri.parse('$_baseUrl/products?limit=$limit'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
       final List<dynamic> products = data['products'] ?? [];
