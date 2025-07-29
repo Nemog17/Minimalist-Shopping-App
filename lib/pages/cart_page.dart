@@ -25,6 +25,10 @@ class CartPage extends StatelessWidget {
         builder: (context, state) {
           final items = state.userCart;
           final saved = state.savedForLater;
+          final counts = <Product, int>{};
+          for (final p in items) {
+            counts[p] = (counts[p] ?? 0) + 1;
+          }
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: ListView(
@@ -38,7 +42,7 @@ class CartPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 15),
-                ...items.map((p) => CartItem(product: p)).toList(),
+                ...counts.entries.map((e) => CartItem(product: e.key, quantity: e.value)).toList(),
                 const SizedBox(height: 20),
                 if (saved.isNotEmpty) ...[
                   Text(

@@ -36,14 +36,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: product.imagePath.startsWith('http')
                           ? Image.network(
                               product.imagePath,
-                              width: 120,
-                              height: 120,
+                              width: 180,
+                              height: 180,
                               fit: BoxFit.cover,
                             )
                           : Image.asset(
                               product.imagePath,
-                              width: 120,
-                              height: 120,
+                              width: 180,
+                              height: 180,
                               fit: BoxFit.cover,
                             ),
                     ),
