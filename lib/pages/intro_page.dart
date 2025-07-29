@@ -50,7 +50,7 @@ class IntroPage extends StatelessWidget {
               //shop now button
               GestureDetector(
                 onTap: () {
-                  context.go('/home');
+                  context.push('/home');
                 },
                 child: Container(
                   decoration: BoxDecoration(color: Colors.grey[900],

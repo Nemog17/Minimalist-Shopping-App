@@ -22,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final auth = context.read<AuthCubit>();
     final success = auth.register(_email.text, _password.text, _address.text);
     if (success) {
-      context.go('/home');
+      context.push('/home');
     } else {
       setState(() => _error = 'El correo ya está en uso');
     }
