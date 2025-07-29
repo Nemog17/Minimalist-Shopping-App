@@ -39,7 +39,10 @@ class CartCubit extends Cubit<CartState> {
     }
 
     try {
-      allProducts.addAll(await DummyJsonService.fetchProducts());
+      // Fetch all available DummyJSON products in a single call.
+      allProducts.addAll(
+        await DummyJsonService.fetchProducts(limit: 194),
+      );
     } catch (_) {
       // Ignore network errors from the DummyJSON API
     }
