@@ -3,53 +3,62 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../components/app_header.dart';
-
 import '../cubits/auth_cubit.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _address = TextEditingController();
   String? _error;
 
   void _submit() {
     final auth = context.read<AuthCubit>();
-    if (auth.state.isLoggedIn) {
-      setState(() => _error = 'Ya has iniciado sesión');
-      return;
-    }
-    final success = auth.login(_emailController.text, _passwordController.text);
+    final success = auth.register(_email.text, _password.text, _address.text);
     if (success) {
       context.go('/home');
     } else {
-      setState(() => _error = 'Credenciales inválidas');
+      setState(() => _error = 'El correo ya está en uso');
     }
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _password.dispose();
+    _address.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppHeader(title: 'Iniciar Sesión', showBack: true),
+      appBar: const AppHeader(title: 'Registrarse', showBack: true),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _emailController,
+              controller: _email,
               decoration: const InputDecoration(labelText: 'Correo electrónico'),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller: _passwordController,
+              controller: _password,
               decoration: const InputDecoration(labelText: 'Contraseña'),
               obscureText: true,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _address,
+              decoration: const InputDecoration(labelText: 'Dirección de envío'),
             ),
             if (_error != null) ...[
               const SizedBox(height: 8),
@@ -58,11 +67,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _submit,
-              child: const Text('Ingresar'),
-            ),
-            TextButton(
-              onPressed: () => context.push('/register'),
-              child: const Text('Crear nueva cuenta'),
+              child: const Text('Registrarse'),
             ),
           ],
         ),

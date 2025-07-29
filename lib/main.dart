@@ -9,10 +9,12 @@ import 'models/product.dart';
 import 'pages/intro_page.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
+import 'pages/register_page.dart';
 import 'pages/admin_page.dart';
 import 'pages/cart_page.dart';
 import 'pages/product_detail_page.dart';
 import 'pages/wishlist_page.dart';
+import 'pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,6 +42,10 @@ class MyApp extends StatelessWidget {
                 builder: (context, state) => const LoginPage(),
               ),
               GoRoute(
+                path: '/register',
+                builder: (context, state) => const RegisterPage(),
+              ),
+              GoRoute(
                 path: '/',
                 builder: (context, state) => const IntroPage(),
               ),
@@ -62,6 +68,10 @@ class MyApp extends StatelessWidget {
                 builder: (context, state) => const WishlistPage(),
               ),
               GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfilePage(),
+              ),
+              GoRoute(
                 path: '/admin',
                 builder: (context, state) => const AdminPage(),
               ),
@@ -70,6 +80,8 @@ class MyApp extends StatelessWidget {
               final isAdmin = authState.isAdmin;
               final loc = state.matchedLocation;
               if (loc == '/login' && authState.isLoggedIn) return '/home';
+              if (loc == '/register' && authState.isLoggedIn) return '/home';
+              if (loc == '/profile' && !authState.isLoggedIn) return '/login';
               if (loc == '/admin' && !isAdmin) return '/home';
               return null;
             },
