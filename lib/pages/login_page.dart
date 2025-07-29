@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String? _error;
 
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() => _error = 'Ya has iniciado sesión');
       return;
     }
-    final success = auth.login(_emailController.text, _passwordController.text);
+    final success = auth.login(_usernameController.text, _passwordController.text);
     if (success) {
       context.push('/home');
     } else {
@@ -42,8 +42,8 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Correo electrónico'),
+              controller: _usernameController,
+              decoration: const InputDecoration(labelText: 'Nombre de usuario'),
             ),
             const SizedBox(height: 12),
             TextField(

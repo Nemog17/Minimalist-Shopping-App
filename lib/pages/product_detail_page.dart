@@ -101,10 +101,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             onPressed: () {
                               context.read<CartCubit>().addItemToWishlist(product);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Añadido a wishlist')),
+                                const SnackBar(content: Text('Añadido a lista de deseo')),
                               );
                             },
-                            child: const Text('Agregar a wishlist'),
+                            child: const Text('Agregar a lista de deseo'),
                           ),
                         ],
                       ),

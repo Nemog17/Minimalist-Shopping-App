@@ -76,7 +76,7 @@ class CartPage extends StatelessWidget {
                 return;
               }
 
-              if (auth.state.currentUser!.address.trim().isEmpty) {
+              if (auth.state.currentUser!.street.trim().isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Agrega una dirección en tu perfil')),
                 );
