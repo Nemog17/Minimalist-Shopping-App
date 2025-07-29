@@ -5,6 +5,7 @@ import '../models/product.dart';
 import 'login_page.dart';
 import '../cubits/auth_cubit.dart';
 import 'package:go_router/go_router.dart';
+import '../components/app_header.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -78,10 +79,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _openCart() {
-    context.push('/cart');
-  }
-
   @override
   void dispose() {
     _searchController.dispose();
@@ -104,64 +101,7 @@ class _HomePageState extends State<HomePage> {
     final authState = context.watch<AuthCubit>().state;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ShoppingRD'),
-        centerTitle: false,
-        actions: [
-          if (authState.isLoggedIn)
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () {
-                context.read<AuthCubit>().logout();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Sesión cerrada')),
-                );
-              },
-            )
-          else
-            IconButton(
-              icon: const Icon(Icons.login),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const LoginPage()),
-              ),
-            ),
-          if (authState.isAdmin)
-            IconButton(
-              icon: const Icon(Icons.admin_panel_settings),
-              onPressed: () => context.push('/admin'),
-            ),
-            Stack(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.shopping_cart),
-                  onPressed: _openCart,
-                ),
-              if (cartCount > 0)
-                Positioned(
-                  right: 6,
-                  top: 6,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
-                    child: Text(
-                      '$cartCount',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          IconButton(
-            icon: const Icon(Icons.favorite),
-            onPressed: () => context.push('/wishlist'),
-          ),
-        ],
-      ),
+      appBar: const AppHeader(title: 'ShoppingRD'),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Column(

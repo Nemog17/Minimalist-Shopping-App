@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../components/app_header.dart';
+
 import '../cubits/cart_cubit.dart';
 import '../components/cart_item.dart';
 
@@ -11,13 +13,7 @@ class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lista de deseos'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      appBar: const AppHeader(title: 'Lista de deseos', showBack: true),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
           final items = state.wishlist;
