@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/product.dart';
 import '../services/fake_store_api.dart';
-import '../services/woocommerce_service.dart';
+import '../services/dummy_json_service.dart';
 
 class CartState {
   final List<Product> productShop;
@@ -38,16 +38,10 @@ class CartCubit extends Cubit<CartState> {
       // Ignore network errors from the fake store API
     }
 
-    final wooService = WooCommerceService(
-      baseUrl: 'https://example.com',
-      consumerKey: 'ck_your_key',
-      consumerSecret: 'cs_your_secret',
-    );
-
     try {
-      allProducts.addAll(await wooService.fetchProducts());
+      allProducts.addAll(await DummyJsonService.fetchProducts());
     } catch (_) {
-      // Errors are already handled inside fetchProducts
+      // Ignore network errors from the DummyJSON API
     }
 
     emit(state.copyWith(productShop: allProducts));
