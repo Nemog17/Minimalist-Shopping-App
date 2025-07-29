@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../components/cart_item.dart';
 import '../cubits/cart_cubit.dart';
 import '../services/payment_service.dart';
+import '../cubits/auth_cubit.dart';
+import 'login_page.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -64,6 +66,46 @@ class CartPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () async {
+                final auth = context.read<AuthCubit>();
+                if (!auth.state.isLoggedIn) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Inicia sesión para comprar')),
+                  );
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const LoginPage()),
+                  );
+                  return;
+                }
+
+                final address = await showDialog<String>(
+                  context: context,
+                  builder: (context) {
+                    final controller = TextEditingController();
+                    return AlertDialog(
+                      title: const Text('Dirección de envío'),
+                      content: TextField(
+                        controller: controller,
+                        decoration: const InputDecoration(
+                          hintText: 'Ingresa tu dirección',
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancelar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () =>
+                              Navigator.pop(context, controller.text),
+                          child: const Text('Continuar'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (address == null || address.trim().isEmpty) return;
+
                 final success = await PaymentService.processPayment(items);
                 if (success) {
                   context.read<CartCubit>().completePurchase();

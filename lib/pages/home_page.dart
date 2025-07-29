@@ -20,13 +20,44 @@ class _HomePageState extends State<HomePage> {
   final List<String> _categories = ['Todos'];
   String _selectedCategory = 'Todos';
 
+  final Map<String, String> _categoryTranslations = const {
+    'smartphones': 'Teléfonos inteligentes',
+    'laptops': 'Portátiles',
+    'fragrances': 'Fragancias',
+    'skincare': 'Cuidado de la piel',
+    'groceries': 'Comestibles',
+    'home-decoration': 'Decoración del hogar',
+    'furniture': 'Muebles',
+    'tops': 'Tops',
+    'womens-dresses': 'Vestidos de mujer',
+    'womens-shoes': 'Zapatos de mujer',
+    'mens-shirts': 'Camisas de hombre',
+    'mens-shoes': 'Zapatos de hombre',
+    'mens-watches': 'Relojes de hombre',
+    'womens-watches': 'Relojes de mujer',
+    'sunglasses': 'Gafas de sol',
+    'bags': 'Bolsos',
+    'jewellery': 'Joyería',
+    'perfumes': 'Perfumes',
+    'lighting': 'Iluminación',
+    'motorcycle': 'Motocicletas',
+    'automotive': 'Automotriz',
+    'electronics': 'Electrónica',
+    'jewelery': 'Joyería',
+    "men's clothing": 'Ropa de hombre',
+    "women's clothing": 'Ropa de mujer',
+  };
+
+  String _translateCategory(String category) {
+    return _categoryTranslations[category] ?? category;
+  }
+
   @override
   void initState() {
     super.initState();
     context.read<CartCubit>().loadProducts().then((_) {
-      final products =
-          context.read<CartCubit>().state.productShop;
-      final uniqueCats = products.map((p) => p.category).toSet();
+      final products = context.read<CartCubit>().state.productShop;
+      final uniqueCats = products.map((p) => _translateCategory(p.category)).toSet();
       setState(() {
         _categories.addAll(uniqueCats);
         _loading = false;
@@ -64,8 +95,8 @@ class _HomePageState extends State<HomePage> {
     final products = allProducts.where((p) {
       final matchesSearch =
           p.name.toLowerCase().contains(_searchQuery.toLowerCase());
-      final matchesCategory =
-          _selectedCategory == 'Todos' || p.category == _selectedCategory;
+      final matchesCategory = _selectedCategory == 'Todos' ||
+          _translateCategory(p.category) == _selectedCategory;
       final isPublished = !p.isDraft;
       return matchesSearch && matchesCategory && isPublished;
     }).toList();
