@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../providers/auth_provider.dart';
+import '../cubits/auth_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,8 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   String? _error;
 
   void _submit() {
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    if (auth.isLoggedIn) {
+    final auth = context.read<AuthCubit>();
+    if (auth.state.isLoggedIn) {
       setState(() => _error = 'Ya has iniciado sesión');
       return;
     }

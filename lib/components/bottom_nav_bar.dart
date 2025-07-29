@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../models/cart.dart';
+import '../cubits/cart_cubit.dart';
 
 class MyBottomNavBar extends StatelessWidget {
   void Function(int)? onTabChange;
@@ -10,7 +10,7 @@ class MyBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cartCount = context.watch<Cart>().getUserCart().length;
+    final cartCount = context.watch<CartCubit>().state.userCart.length;
     String cartText;
     if (cartCount == 1) {
       cartText = 'Cart (1 item)';

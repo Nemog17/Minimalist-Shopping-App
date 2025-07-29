@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/product.dart';
-import '../models/cart.dart';
+import '../cubits/cart_cubit.dart';
 
 class CartItem extends StatelessWidget {
   final Product product;
@@ -11,17 +11,17 @@ class CartItem extends StatelessWidget {
 
   void _remove(BuildContext context) {
     if (isSavedItem) {
-      Provider.of<Cart>(context, listen: false).removeItemFromSaved(product);
+      context.read<CartCubit>().removeItemFromSaved(product);
     } else {
-      Provider.of<Cart>(context, listen: false).removeItemFromCart(product);
+      context.read<CartCubit>().removeItemFromCart(product);
     }
   }
 
   void _toggleSave(BuildContext context) {
     if (isSavedItem) {
-      Provider.of<Cart>(context, listen: false).moveToCart(product);
+      context.read<CartCubit>().moveToCart(product);
     } else {
-      Provider.of<Cart>(context, listen: false).saveItemForLater(product);
+      context.read<CartCubit>().saveItemForLater(product);
     }
   }
 

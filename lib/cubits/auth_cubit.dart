@@ -1,26 +1,30 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/user.dart';
 
-class AuthProvider extends ChangeNotifier {
-  User? _currentUser;
+class AuthState {
+  final User? currentUser;
+
+  const AuthState({this.currentUser});
+
+  bool get isLoggedIn => currentUser != null;
+  bool get isAdmin => currentUser?.isAdmin ?? false;
+}
+
+class AuthCubit extends Cubit<AuthState> {
+  AuthCubit() : super(const AuthState());
 
   final List<User> _users = const [
     User(email: 'admin@example.com', password: 'admin123', isAdmin: true),
     User(email: 'user@example.com', password: 'user123'),
   ];
 
-  User? get currentUser => _currentUser;
-  bool get isLoggedIn => _currentUser != null;
-  bool get isAdmin => _currentUser?.isAdmin ?? false;
-
   bool login(String email, String password) {
-    if (isLoggedIn) return false;
+    if (state.isLoggedIn) return false;
     try {
       final user = _users.firstWhere(
         (u) => u.email == email && u.password == password,
       );
-      _currentUser = user;
-      notifyListeners();
+      emit(AuthState(currentUser: user));
       return true;
     } catch (_) {
       return false;
@@ -28,7 +32,6 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void logout() {
-    _currentUser = null;
-    notifyListeners();
+    emit(const AuthState());
   }
 }

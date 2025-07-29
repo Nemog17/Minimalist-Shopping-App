@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../components/cart_item.dart';
-import '../models/cart.dart';
+import '../cubits/cart_cubit.dart';
 import '../services/payment_service.dart';
 
 class CartPage extends StatelessWidget {
@@ -19,10 +19,10 @@ class CartPage extends StatelessWidget {
           onPressed: () => context.pop(),
         ),
       ),
-      body: Consumer<Cart>(
-        builder: (context, cart, child) {
-          final items = cart.getUserCart();
-          final saved = cart.getSavedForLater();
+      body: BlocBuilder<CartCubit, CartState>(
+        builder: (context, state) {
+          final items = state.userCart;
+          final saved = state.savedForLater;
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
             child: ListView(
@@ -56,9 +56,9 @@ class CartPage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: Consumer<Cart>(
-        builder: (context, cart, child) {
-          final items = cart.getUserCart();
+      bottomNavigationBar: BlocBuilder<CartCubit, CartState>(
+        builder: (context, state) {
+          final items = state.userCart;
           if (items.isEmpty) return const SizedBox.shrink();
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -66,7 +66,7 @@ class CartPage extends StatelessWidget {
               onPressed: () async {
                 final success = await PaymentService.processPayment(items);
                 if (success) {
-                  cart.clearCart();
+                  context.read<CartCubit>().clearCart();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Pago completado')),
                   );
