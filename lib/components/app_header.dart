@@ -37,7 +37,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.shopping_cart),
-              onPressed: () => context.go('/cart'),
+              onPressed: () => context.push('/cart'),
             ),
             if (cartCount > 0)
               Positioned(
@@ -61,12 +61,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         ),
         IconButton(
           icon: const Icon(Icons.favorite),
-          onPressed: () => context.go('/wishlist'),
+          onPressed: () => context.push('/wishlist'),
         ),
         if (authState.isAdmin)
           IconButton(
             icon: const Icon(Icons.admin_panel_settings),
-            onPressed: () => context.go('/admin'),
+            onPressed: () => context.push('/admin'),
           ),
         if (authState.isLoggedIn)
           IconButton(
@@ -81,7 +81,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         else
           IconButton(
             icon: const Icon(Icons.login),
-            onPressed: () => context.go('/login'),
+            onPressed: () => context.push('/login'),
           ),
       ],
     );
