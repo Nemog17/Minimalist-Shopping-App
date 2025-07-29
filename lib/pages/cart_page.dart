@@ -76,49 +76,29 @@ class CartPage extends StatelessWidget {
                 return;
               }
 
-                final address = await showDialog<String>(
-                  context: context,
-                  builder: (context) {
-                    final controller = TextEditingController();
-                    return AlertDialog(
-                      title: const Text('Dirección de envío'),
-                      content: TextField(
-                        controller: controller,
-                        decoration: const InputDecoration(
-                          hintText: 'Ingresa tu dirección',
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancelar'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () =>
-                              Navigator.pop(context, controller.text),
-                          child: const Text('Continuar'),
-                        ),
-                      ],
-                    );
-                  },
+              if (auth.state.currentUser!.address.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Agrega una dirección en tu perfil')),
                 );
+                context.push('/profile');
+                return;
+              }
 
-                if (address == null || address.trim().isEmpty) return;
-
-                final success = await PaymentService.processPayment(items);
-                if (success) {
-                  context.read<CartCubit>().completePurchase();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Pago completado')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Error al procesar pago')),
-                  );
-                }
-              },
-              label: const Text('Pagar'),
-            );
+              final success = await PaymentService.processPayment(items);
+              if (success) {
+                context.read<AuthCubit>().addOrder(List<Product>.from(items));
+                context.read<CartCubit>().completePurchase();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Pago completado')),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Error al procesar pago')),
+                );
+              }
+            },
+            label: const Text('Pagar'),
+          );
         },
       ),
     );

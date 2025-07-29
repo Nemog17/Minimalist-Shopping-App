@@ -68,7 +68,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             icon: const Icon(Icons.admin_panel_settings),
             onPressed: () => context.push('/admin'),
           ),
-        if (authState.isLoggedIn)
+        if (authState.isLoggedIn) ...[
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () => context.push('/profile'),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
@@ -77,7 +81,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 const SnackBar(content: Text('Sesión cerrada')),
               );
             },
-          )
+          ),
+        ]
         else
           IconButton(
             icon: const Icon(Icons.login),
