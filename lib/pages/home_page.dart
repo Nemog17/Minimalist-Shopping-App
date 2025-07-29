@@ -161,7 +161,8 @@ class _HomePageState extends State<HomePage> {
                   child: GridView.builder(
                     padding: const EdgeInsets.all(12),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
+                      // Show more items by making each grid tile smaller
+                      crossAxisCount: 4,
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
                       childAspectRatio: 0.65,
