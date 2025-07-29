@@ -35,7 +35,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addToCart(Product product) {
-    context.read<CartCubit>().addItemToCart(product);
+    if (product.stock > 0) {
+      context.read<CartCubit>().addItemToCart(product);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Producto agregado')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sin stock')),
+      );
+    }
   }
 
   void _openCart() {
@@ -90,12 +99,12 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.admin_panel_settings),
               onPressed: () => context.push('/admin'),
             ),
-          Stack(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.shopping_cart),
-                onPressed: _openCart,
-              ),
+            Stack(
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.shopping_cart),
+                  onPressed: _openCart,
+                ),
               if (cartCount > 0)
                 Positioned(
                   right: 6,
@@ -115,6 +124,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
             ],
+          ),
+          IconButton(
+            icon: const Icon(Icons.favorite),
+            onPressed: () => context.push('/wishlist'),
           ),
         ],
       ),
@@ -170,12 +183,14 @@ class _HomePageState extends State<HomePage> {
                     itemCount: products.length,
                     itemBuilder: (context, index) {
                       final product = products[index];
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
+                      return GestureDetector(
+                        onTap: () => context.push('/product', extra: product),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Expanded(

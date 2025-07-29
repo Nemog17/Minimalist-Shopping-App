@@ -16,16 +16,24 @@ class _ShopPageState extends State<ShopPage> {
   bool _isLoading = true;
 
   //adding product to cart method
-  void addProductToCart(Product product)
-  {
-    context.read<CartCubit>().addItemToCart(product);
-
-//alert added successfully
-showDialog(context: context, builder:(context) => AlertDialog(
-  title: Text('Successfully added!'),
-  content: Text('Check your cart'),
-),
-);
+  void addProductToCart(Product product) {
+    if (product.stock > 0) {
+      context.read<CartCubit>().addItemToCart(product);
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text('Successfully added!'),
+          content: Text('Check your cart'),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text('Sin stock'),
+        ),
+      );
+    }
   }
 
   @override
@@ -84,8 +92,12 @@ showDialog(context: context, builder:(context) => AlertDialog(
           Product product = state.productShop[index];
 
           //return product
-          return ProductTile(product: product,
-          onTap: () => addProductToCart(product),
+          return GestureDetector(
+            onTap: () => context.push('/product', extra: product),
+            child: ProductTile(
+              product: product,
+              onTap: () => addProductToCart(product),
+            ),
           );
 
         },

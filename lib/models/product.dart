@@ -5,6 +5,7 @@ class Product {
   String description;
   String category;
   bool isDraft;
+  int stock;
 
   /// Basic product model used throughout the app.
   Product({
@@ -12,6 +13,7 @@ class Product {
     required this.price,
     required this.description,
     required this.imagePath,
+    this.stock = 0,
     this.category = 'General',
     this.isDraft = false,
   });

@@ -25,6 +25,7 @@ class _AdminPageState extends State<AdminPage> {
       price: _price.text,
       description: _description.text,
       imagePath: _image.text,
+      stock: 10,
       isDraft: _draft,
     );
     cubit.addProductToShop(product);
