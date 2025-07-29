@@ -1,0 +1,5 @@
+{"products": [
+  {"title": "Item 1", "price": 10, "description": "First item", "thumbnail": "", "stock": 5, "category": "general"},
+  {"title": "Item 2", "price": 20, "description": "Second item", "thumbnail": "", "stock": 3, "category": "general"},
+  {"title": "Item 3", "price": 30, "description": "Third item", "thumbnail": "", "stock": 2, "category": "general"}
+]}
