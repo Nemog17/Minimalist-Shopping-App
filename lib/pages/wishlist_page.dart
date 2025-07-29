@@ -13,7 +13,7 @@ class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppHeader(title: 'Lista de deseos', showBack: true),
+      appBar: const AppHeader(title: 'Lista de deseo', showBack: true),
       body: BlocBuilder<CartCubit, CartState>(
         builder: (context, state) {
           final items = state.wishlist;

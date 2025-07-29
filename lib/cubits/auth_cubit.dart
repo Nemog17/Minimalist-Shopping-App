@@ -15,15 +15,26 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(const AuthState());
 
   final List<User> _users = [
-    User(email: 'admin@example.com', password: 'admin123', isAdmin: true),
-    User(email: 'user@example.com', password: 'user123'),
+    User(
+      email: 'admin@example.com',
+      username: 'admin',
+      password: 'admin123',
+      isAdmin: true,
+      name: 'Administrador',
+    ),
+    User(
+      email: 'user@example.com',
+      username: 'user',
+      password: 'user123',
+      name: 'Usuario',
+    ),
   ];
 
-  bool login(String email, String password) {
+  bool login(String username, String password) {
     if (state.isLoggedIn) return false;
     try {
       final user = _users.firstWhere(
-        (u) => u.email == email && u.password == password,
+        (u) => u.username == username && u.password == password,
       );
       emit(AuthState(currentUser: user));
       return true;
@@ -32,18 +43,46 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  bool register(String email, String password, String address) {
-    if (_users.any((u) => u.email == email)) return false;
-    final user = User(email: email, password: password, address: address);
+  bool register({
+    required String email,
+    required String username,
+    required String password,
+    required String name,
+    required String phone,
+    required String street,
+    required String province,
+    required String city,
+  }) {
+    if (_users.any((u) => u.email == email || u.username == username)) return false;
+    final user = User(
+      email: email,
+      username: username,
+      password: password,
+      name: name,
+      phone: phone,
+      street: street,
+      province: province,
+      city: city,
+    );
     _users.add(user);
     emit(AuthState(currentUser: user));
     return true;
   }
 
-  void updateAddress(String address) {
+  void updateProfile({
+    String? name,
+    String? phone,
+    String? street,
+    String? province,
+    String? city,
+  }) {
     final user = state.currentUser;
     if (user != null) {
-      user.address = address;
+      if (name != null) user.name = name;
+      if (phone != null) user.phone = phone;
+      if (street != null) user.street = street;
+      if (province != null) user.province = province;
+      if (city != null) user.city = city;
       emit(AuthState(currentUser: user));
     }
   }

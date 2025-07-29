@@ -14,13 +14,33 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _email = TextEditingController();
+  final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  final TextEditingController _address = TextEditingController();
+  final TextEditingController _name = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
+  final TextEditingController _street = TextEditingController();
+  String _province = '';
+  String _city = '';
+  final Map<String, List<String>> _provinces = const {
+    'Distrito Nacional': ['Distrito Nacional'],
+    'Santo Domingo': ['Santo Domingo Este', 'Santo Domingo Norte', 'Santo Domingo Oeste'],
+    'Santiago': ['Santiago de los Caballeros'],
+    'La Vega': ['La Vega', 'Constanza'],
+  };
   String? _error;
 
   void _submit() {
     final auth = context.read<AuthCubit>();
-    final success = auth.register(_email.text, _password.text, _address.text);
+    final success = auth.register(
+      email: _email.text,
+      username: _username.text,
+      password: _password.text,
+      name: _name.text,
+      phone: _phone.text,
+      street: _street.text,
+      province: _province,
+      city: _city,
+    );
     if (success) {
       context.push('/home');
     } else {
@@ -31,8 +51,11 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     _email.dispose();
+    _username.dispose();
     _password.dispose();
-    _address.dispose();
+    _name.dispose();
+    _phone.dispose();
+    _street.dispose();
     super.dispose();
   }
 
@@ -51,14 +74,52 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             const SizedBox(height: 12),
             TextField(
+              controller: _username,
+              decoration: const InputDecoration(labelText: 'Nombre de usuario'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
               controller: _password,
               decoration: const InputDecoration(labelText: 'Contraseña'),
               obscureText: true,
             ),
             const SizedBox(height: 12),
             TextField(
-              controller: _address,
-              decoration: const InputDecoration(labelText: 'Dirección de envío'),
+              controller: _name,
+              decoration: const InputDecoration(labelText: 'Nombre'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _phone,
+              decoration: const InputDecoration(labelText: 'Teléfono'),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _street,
+              decoration: const InputDecoration(labelText: 'Calle'),
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              value: _province.isEmpty ? null : _province,
+              decoration: const InputDecoration(labelText: 'Provincia'),
+              items: _provinces.keys
+                  .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _province = value ?? '';
+                  _city = '';
+                });
+              },
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              value: _city.isEmpty ? null : _city,
+              decoration: const InputDecoration(labelText: 'Ciudad'),
+              items: (_provinces[_province] ?? [])
+                  .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                  .toList(),
+              onChanged: (value) => setState(() => _city = value ?? ''),
             ),
             if (_error != null) ...[
               const SizedBox(height: 8),
