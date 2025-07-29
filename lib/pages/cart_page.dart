@@ -66,7 +66,7 @@ class CartPage extends StatelessWidget {
               onPressed: () async {
                 final success = await PaymentService.processPayment(items);
                 if (success) {
-                  context.read<CartCubit>().clearCart();
+                  context.read<CartCubit>().completePurchase();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Pago completado')),
                   );

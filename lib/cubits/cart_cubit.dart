@@ -55,11 +55,23 @@ class CartCubit extends Cubit<CartState> {
   }
 
   void addItemToCart(Product product, {int quantity = 1}) {
-    if (product.stock < quantity) return;
-    final updatedCart = List<Product>.from(state.userCart)
-      ..addAll(List.filled(quantity, product));
-    product.stock -= quantity;
-    emit(state.copyWith(userCart: updatedCart));
+    final cart = List<Product>.from(state.userCart);
+    final currentQuantity =
+        cart.where((p) => identical(p, product)).length;
+    if (product.stock < currentQuantity + quantity) return;
+    cart.addAll(List.filled(quantity, product));
+    emit(state.copyWith(userCart: cart));
+  }
+
+  void completePurchase() {
+    final counts = <Product, int>{};
+    for (final p in state.userCart) {
+      counts[p] = (counts[p] ?? 0) + 1;
+    }
+    counts.forEach((product, qty) {
+      product.stock -= qty;
+    });
+    emit(state.copyWith(userCart: []));
   }
 
   void saveItemForLater(Product product) {
