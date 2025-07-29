@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:translator/translator.dart';
 import '../models/product.dart';
 
 /// Service class for interacting with the DummyJSON API.
@@ -16,19 +17,28 @@ class DummyJsonService {
     final response =
         await http.get(Uri.parse('$_baseUrl/products?limit=$limit'));
     if (response.statusCode == 200) {
+      final translator = GoogleTranslator();
       final Map<String, dynamic> data = jsonDecode(response.body);
       final List<dynamic> products = data['products'] ?? [];
-      return products
-          .map((item) => Product(
-                name: item['title'] ?? 'Unknown',
-                price: item['price'].toString(),
-                description: item['description'] ?? '',
-                imagePath: item['thumbnail'] ?? '',
-                stock: item['stock'] ?? 0,
-                category: item['category'] ?? 'General',
-                isDraft: false,
-              ))
-          .toList();
+      final List<Product> list = [];
+      for (final item in products) {
+        final name = item['title'] ?? 'Unknown';
+        final description = item['description'] ?? '';
+        final translatedName = await translator.translate(name, to: 'es');
+        final translatedDesc = await translator.translate(description, to: 'es');
+        list.add(
+          Product(
+            name: translatedName.text,
+            price: item['price'].toString(),
+            description: translatedDesc.text,
+            imagePath: item['thumbnail'] ?? '',
+            stock: item['stock'] ?? 0,
+            category: item['category'] ?? 'General',
+            isDraft: false,
+          ),
+        );
+      }
+      return list;
     } else {
       throw Exception('Failed to load products');
     }

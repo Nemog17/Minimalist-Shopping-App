@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubits/cart_cubit.dart';
 import '../models/product.dart';
+import '../components/app_drawer.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product product;
@@ -19,6 +20,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     final product = widget.product;
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(title: Text(product.name)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

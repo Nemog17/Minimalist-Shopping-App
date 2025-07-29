@@ -5,6 +5,7 @@ import '../models/product.dart';
 import 'login_page.dart';
 import '../cubits/auth_cubit.dart';
 import 'package:go_router/go_router.dart';
+import '../components/app_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -104,6 +105,7 @@ class _HomePageState extends State<HomePage> {
     final authState = context.watch<AuthCubit>().state;
 
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text('ShoppingRD'),
         centerTitle: false,

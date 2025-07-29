@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/product.dart';
 import '../cubits/cart_cubit.dart';
+import '../components/app_drawer.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -41,7 +42,8 @@ class _AdminPageState extends State<AdminPage> {
     final cubit = context.read<CartCubit>();
     final cart = context.watch<CartCubit>().state;
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Panel')),
+      drawer: const AppDrawer(),
+      appBar: AppBar(title: const Text('Panel de Administración')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -49,29 +51,29 @@ class _AdminPageState extends State<AdminPage> {
             children: [
               TextField(
                 controller: _name,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Nombre'),
               ),
               TextField(
                 controller: _price,
-                decoration: const InputDecoration(labelText: 'Price'),
+                decoration: const InputDecoration(labelText: 'Precio'),
               ),
               TextField(
                 controller: _description,
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Descripción'),
               ),
               TextField(
                 controller: _image,
-                decoration: const InputDecoration(labelText: 'Image URL'),
+                decoration: const InputDecoration(labelText: 'URL de imagen'),
               ),
               SwitchListTile(
-                title: const Text('Draft'),
+                title: const Text('Borrador'),
                 value: _draft,
                 onChanged: (value) => setState(() => _draft = value),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: _addProduct,
-                child: const Text('Add Product'),
+                child: const Text('Agregar Producto'),
               ),
               const SizedBox(height: 20),
               ListView.builder(

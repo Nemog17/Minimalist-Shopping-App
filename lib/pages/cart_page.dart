@@ -8,6 +8,7 @@ import '../services/payment_service.dart';
 import '../cubits/auth_cubit.dart';
 import '../models/product.dart';
 import 'login_page.dart';
+import '../components/app_drawer.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -15,6 +16,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text('Mi Carrito'),
         leading: IconButton(
