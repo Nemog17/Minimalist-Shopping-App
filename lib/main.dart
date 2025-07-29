@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'utils/go_router_refresh_stream.dart';
 
-import 'models/cart.dart';
-import 'providers/auth_provider.dart';
+import 'cubits/cart_cubit.dart';
+import 'cubits/auth_cubit.dart';
 import 'pages/intro_page.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
@@ -19,16 +20,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => Cart()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        BlocProvider(create: (_) => CartCubit()),
+        BlocProvider(create: (_) => AuthCubit()),
       ],
-      child: Consumer<AuthProvider>(
-        builder: (context, auth, _) {
+      child: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
+          final authCubit = context.read<AuthCubit>();
           final router = GoRouter(
             initialLocation: '/',
-            refreshListenable: auth,
+            refreshListenable: GoRouterRefreshStream(authCubit.stream),
             routes: [
               GoRoute(
                 path: '/login',
@@ -52,9 +54,9 @@ class MyApp extends StatelessWidget {
               ),
             ],
             redirect: (context, state) {
-              final isAdmin = auth.isAdmin;
+              final isAdmin = authState.isAdmin;
               final loc = state.matchedLocation;
-              if (loc == '/login' && auth.isLoggedIn) return '/home';
+              if (loc == '/login' && authState.isLoggedIn) return '/home';
               if (loc == '/admin' && !isAdmin) return '/home';
               return null;
             },

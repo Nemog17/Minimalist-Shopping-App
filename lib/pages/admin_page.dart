@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/product.dart';
-import '../models/cart.dart';
+import '../cubits/cart_cubit.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -19,7 +19,7 @@ class _AdminPageState extends State<AdminPage> {
   bool _draft = false;
 
   void _addProduct() {
-    final cart = Provider.of<Cart>(context, listen: false);
+    final cubit = context.read<CartCubit>();
     final product = Product(
       name: _name.text,
       price: _price.text,
@@ -27,8 +27,7 @@ class _AdminPageState extends State<AdminPage> {
       imagePath: _image.text,
       isDraft: _draft,
     );
-    cart.productShop.add(product);
-    cart.notifyListeners();
+    cubit.addProductToShop(product);
     _name.clear();
     _price.clear();
     _description.clear();
@@ -38,7 +37,8 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<Cart>(context);
+    final cubit = context.read<CartCubit>();
+    final cart = context.watch<CartCubit>().state;
     return Scaffold(
       appBar: AppBar(title: const Text('Admin Panel')),
       body: Padding(
@@ -91,14 +91,13 @@ class _AdminPageState extends State<AdminPage> {
                             setState(() {
                               product.isDraft = val;
                             });
-                            cart.notifyListeners();
+                            cubit.updateProduct(index, product);
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
                           onPressed: () {
-                            cart.productShop.removeAt(index);
-                            cart.notifyListeners();
+                            cubit.removeProductAt(index);
                           },
                         ),
                       ],

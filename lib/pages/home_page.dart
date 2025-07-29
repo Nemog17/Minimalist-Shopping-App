@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../models/cart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../cubits/cart_cubit.dart';
 import '../models/product.dart';
 import 'login_page.dart';
-import '../providers/auth_provider.dart';
+import '../cubits/auth_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
@@ -23,9 +23,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<Cart>(context, listen: false).loadProducts().then((_) {
+    context.read<CartCubit>().loadProducts().then((_) {
       final products =
-          Provider.of<Cart>(context, listen: false).getProductList();
+          context.read<CartCubit>().state.productShop;
       final uniqueCats = products.map((p) => p.category).toSet();
       setState(() {
         _categories.addAll(uniqueCats);
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addToCart(Product product) {
-    Provider.of<Cart>(context, listen: false).addItemToCart(product);
+    context.read<CartCubit>().addItemToCart(product);
   }
 
   void _openCart() {
@@ -50,8 +50,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = context.watch<Cart>();
-    final allProducts = cart.getProductList();
+    final cartState = context.watch<CartCubit>().state;
+    final allProducts = cartState.productShop;
     final products = allProducts.where((p) {
       final matchesSearch =
           p.name.toLowerCase().contains(_searchQuery.toLowerCase());
@@ -60,19 +60,19 @@ class _HomePageState extends State<HomePage> {
       final isPublished = !p.isDraft;
       return matchesSearch && matchesCategory && isPublished;
     }).toList();
-    final cartCount = cart.getUserCart().length;
-    final auth = context.watch<AuthProvider>();
+    final cartCount = cartState.userCart.length;
+    final authState = context.watch<AuthCubit>().state;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('ShoppingRD'),
         centerTitle: false,
         actions: [
-          if (auth.isLoggedIn)
+          if (authState.isLoggedIn)
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
-                auth.logout();
+                context.read<AuthCubit>().logout();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Sesión cerrada')),
                 );
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                 MaterialPageRoute(builder: (_) => const LoginPage()),
               ),
             ),
-          if (auth.isAdmin)
+          if (authState.isAdmin)
             IconButton(
               icon: const Icon(Icons.admin_panel_settings),
               onPressed: () => context.push('/admin'),

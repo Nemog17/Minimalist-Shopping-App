@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../components/product_tile.dart';
-import '../models/cart.dart';
+import '../cubits/cart_cubit.dart';
 import '../models/product.dart';
 
 class ShopPage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _ShopPageState extends State<ShopPage> {
   //adding product to cart method
   void addProductToCart(Product product)
   {
-Provider.of<Cart>(context, listen:false).addItemToCart(product);
+    context.read<CartCubit>().addItemToCart(product);
 
 //alert added successfully
 showDialog(context: context, builder:(context) => AlertDialog(
@@ -31,7 +31,7 @@ showDialog(context: context, builder:(context) => AlertDialog(
   @override
   void initState() {
     super.initState();
-    Provider.of<Cart>(context, listen: false).loadProducts().then((_) {
+    context.read<CartCubit>().loadProducts().then((_) {
       setState(() {
         _isLoading = false;
       });
@@ -39,7 +39,7 @@ showDialog(context: context, builder:(context) => AlertDialog(
   }
   @override
   Widget build(BuildContext context) {
-    return Consumer<Cart>(builder: (context, value, child) => _isLoading
+    return BlocBuilder<CartCubit, CartState>(builder: (context, state) => _isLoading
         ? const Center(child: CircularProgressIndicator())
         : Column(
       children: [
@@ -76,12 +76,12 @@ showDialog(context: context, builder:(context) => AlertDialog(
 
         const SizedBox(height:10),
 
-        Expanded(child: ListView.builder(
-          itemCount: value.getProductList().length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-          //create a product
-          Product product = value.getProductList()[index];
+          Expanded(child: ListView.builder(
+            itemCount: state.productShop.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+            //create a product
+          Product product = state.productShop[index];
 
           //return product
           return ProductTile(product: product,
