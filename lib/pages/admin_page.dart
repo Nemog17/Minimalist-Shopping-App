@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../models/product.dart';
 import '../cubits/cart_cubit.dart';
-import '../components/app_drawer.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -42,7 +41,6 @@ class _AdminPageState extends State<AdminPage> {
     final cubit = context.read<CartCubit>();
     final cart = context.watch<CartCubit>().state;
     return Scaffold(
-      drawer: const AppDrawer(),
       appBar: AppBar(title: const Text('Panel de Administración')),
       body: Padding(
         padding: const EdgeInsets.all(16),
