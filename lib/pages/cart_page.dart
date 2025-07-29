@@ -6,6 +6,7 @@ import '../components/cart_item.dart';
 import '../cubits/cart_cubit.dart';
 import '../services/payment_service.dart';
 import '../cubits/auth_cubit.dart';
+import '../models/product.dart';
 import 'login_page.dart';
 
 class CartPage extends StatelessWidget {
