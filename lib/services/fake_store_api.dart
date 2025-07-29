@@ -18,6 +18,7 @@ class FakeStoreApi {
                 price: item['price'].toString(),
                 description: item['description'] ?? '',
                 imagePath: item['image'] ?? '',
+                stock: 10,
                 category: item['category'] ?? 'General',
                 isDraft: false,
               ))

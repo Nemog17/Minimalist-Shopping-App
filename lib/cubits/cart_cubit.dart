@@ -7,22 +7,26 @@ class CartState {
   final List<Product> productShop;
   final List<Product> userCart;
   final List<Product> savedForLater;
+  final List<Product> wishlist;
 
   const CartState({
     this.productShop = const [],
     this.userCart = const [],
     this.savedForLater = const [],
+    this.wishlist = const [],
   });
 
   CartState copyWith({
     List<Product>? productShop,
     List<Product>? userCart,
     List<Product>? savedForLater,
+    List<Product>? wishlist,
   }) {
     return CartState(
       productShop: productShop ?? this.productShop,
       userCart: userCart ?? this.userCart,
       savedForLater: savedForLater ?? this.savedForLater,
+      wishlist: wishlist ?? this.wishlist,
     );
   }
 }
@@ -50,8 +54,11 @@ class CartCubit extends Cubit<CartState> {
     emit(state.copyWith(productShop: allProducts));
   }
 
-  void addItemToCart(Product product) {
-    final updatedCart = List<Product>.from(state.userCart)..add(product);
+  void addItemToCart(Product product, {int quantity = 1}) {
+    if (product.stock < quantity) return;
+    final updatedCart = List<Product>.from(state.userCart)
+      ..addAll(List.filled(quantity, product));
+    product.stock -= quantity;
     emit(state.copyWith(userCart: updatedCart));
   }
 
@@ -79,6 +86,17 @@ class CartCubit extends Cubit<CartState> {
   void removeItemFromSaved(Product product) {
     final saved = List<Product>.from(state.savedForLater)..remove(product);
     emit(state.copyWith(savedForLater: saved));
+  }
+
+  void addItemToWishlist(Product product) {
+    final list = List<Product>.from(state.wishlist);
+    if (!list.contains(product)) list.add(product);
+    emit(state.copyWith(wishlist: list));
+  }
+
+  void removeItemFromWishlist(Product product) {
+    final list = List<Product>.from(state.wishlist)..remove(product);
+    emit(state.copyWith(wishlist: list));
   }
 
   void addProductToShop(Product product) {

@@ -24,6 +24,7 @@ class DummyJsonService {
                 price: item['price'].toString(),
                 description: item['description'] ?? '',
                 imagePath: item['thumbnail'] ?? '',
+                stock: item['stock'] ?? 0,
                 category: item['category'] ?? 'General',
                 isDraft: false,
               ))
