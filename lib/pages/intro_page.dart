@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
+import '../components/app_drawer.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
@@ -8,6 +9,7 @@ class IntroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       backgroundColor: Colors.grey[300],
       body: Center(
         child: Padding(

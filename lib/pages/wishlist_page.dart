@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../cubits/cart_cubit.dart';
 import '../components/cart_item.dart';
+import '../components/app_drawer.dart';
 
 class WishlistPage extends StatelessWidget {
   const WishlistPage({super.key});
@@ -11,8 +12,9 @@ class WishlistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
-        title: const Text('Wishlist'),
+        title: const Text('Lista de deseos'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
