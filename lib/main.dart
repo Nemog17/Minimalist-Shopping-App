@@ -6,7 +6,6 @@ import 'utils/go_router_refresh_stream.dart';
 import 'cubits/cart_cubit.dart';
 import 'cubits/auth_cubit.dart';
 import 'models/product.dart';
-import 'pages/intro_page.dart';
 import 'pages/home_page.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
@@ -34,7 +33,7 @@ class MyApp extends StatelessWidget {
         builder: (context, authState) {
           final authCubit = context.read<AuthCubit>();
           final router = GoRouter(
-            initialLocation: '/',
+            initialLocation: '/home',
             refreshListenable: GoRouterRefreshStream(authCubit.stream),
             routes: [
               GoRoute(
@@ -44,10 +43,6 @@ class MyApp extends StatelessWidget {
               GoRoute(
                 path: '/register',
                 builder: (context, state) => const RegisterPage(),
-              ),
-              GoRoute(
-                path: '/',
-                builder: (context, state) => const IntroPage(),
               ),
               GoRoute(
                 path: '/home',
